@@ -1,0 +1,15 @@
+docker-compose.env
+docker-compose.yml
+docker-compose-*.yml
+Dockerfile
+.dockerignore
+
+test
+coverage
+
+node_modules
+dist
+logs
+
+.vscode
+.husky

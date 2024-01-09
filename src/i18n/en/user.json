@@ -1,0 +1,4 @@
+{
+  "NotFound": "User not found",
+  "EmailExists": "An account with the email already exists"
+}

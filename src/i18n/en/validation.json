@@ -1,0 +1,4 @@
+{
+  "NotEmpty": "{property} cannot be empty",
+  "IsString": "{property} must be a string abc"
+}
