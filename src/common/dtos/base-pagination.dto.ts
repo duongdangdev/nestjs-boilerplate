@@ -31,7 +31,7 @@ class BasePaginationMeta {
 }
 
 export abstract class BasePaginationResponse<T> {
-  data: T[];
+  abstract data: T[];
 
   @ApiProperty({ type: BasePaginationMeta })
   meta: BasePaginationMeta;

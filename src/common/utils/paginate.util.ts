@@ -15,7 +15,7 @@ export const createPaginateResponse = <T>({
   page: number;
   perPage: number;
 }): BasePaginationResponse<T> => {
-  const totalPages = Math.floor(total / perPage);
+  const totalPages = Math.ceil(total / perPage);
 
   return {
     data,
