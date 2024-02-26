@@ -22,6 +22,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       pinoHttp: {
         redact: ['req.headers.authorization'],
       },
+      exclude: ['health'],
     }),
     I18nModule.forRoot({
       fallbackLanguage: APP_CONFIG.fallbackLanguage,
