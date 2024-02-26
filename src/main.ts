@@ -9,9 +9,9 @@ import {
   HttpExceptionFilter,
   InternalErrorExceptionFilter,
 } from './common/filters';
-import { APP_CONFIG, NODE_ENV } from './configs';
-import { IExceptionResponse } from './common/types';
 import { TimeoutInterceptor } from './common/interceptors';
+import { IExceptionResponse } from './common/types';
+import { APP_CONFIG, NODE_ENV } from './configs';
 
 function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -43,7 +43,9 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  app.useLogger(app.get(Logger));
+  const logger = app.get(Logger);
+
+  app.useLogger(logger);
 
   app.useGlobalPipes(
     new I18nValidationPipe({
@@ -54,7 +56,7 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(
-    new InternalErrorExceptionFilter(),
+    new InternalErrorExceptionFilter(logger),
     new HttpExceptionFilter(),
     new I18nValidationExceptionFilter({
       detailedErrors: false,
