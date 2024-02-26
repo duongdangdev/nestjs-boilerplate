@@ -4,7 +4,7 @@ export enum USER_STATUS {
 }
 
 export interface IUserContext {
-  id: number;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;

@@ -1,23 +1,41 @@
 import { AutoMap } from '@automapper/classes';
+import { Prop } from '@nestjs/mongoose';
 import { USER_STATUS } from '@src/common/consts';
+import {
+  BaseMongoEntity,
+  MongooseResultType,
+  MongooseSchema,
+  MongooseSchemaFactory,
+} from '@src/common/packages/mongoose';
+import { Model } from 'mongoose';
 
-export class User {
+@MongooseSchema()
+export class User extends BaseMongoEntity {
   @AutoMap()
-  id: number;
-
-  @AutoMap()
+  @Prop({ unique: true })
   email: string;
 
+  @Prop()
   password: string;
 
+  @Prop()
   status: USER_STATUS;
 
   @AutoMap()
+  @Prop()
   firstName: string;
 
   @AutoMap()
+  @Prop()
   lastName: string;
 
   @AutoMap()
+  @Prop()
   gender: string;
 }
+
+export const UserSchema = MongooseSchemaFactory.create(User);
+
+export type UserResultType = User & MongooseResultType;
+
+export type UserModel = Model<User>;

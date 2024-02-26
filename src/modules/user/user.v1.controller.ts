@@ -1,16 +1,13 @@
 import { MapInterceptor } from '@automapper/nestjs';
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from '@src/common/decorators';
 import { UserResponse } from './dtos/user-response.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+import { MapListInterceptor } from '@src/common/interceptors/map-list.interceptor';
+import { BasePaginationRequest } from '@src/common/dtos';
+import { ParseObjectIdPipe } from '@src/common/packages/mongoose/pipes';
 
 @Controller({
   version: '1',
@@ -26,18 +23,18 @@ export class UserControllerV1 {
     isArray: true,
   })
   @Auth()
-  @UseInterceptors(MapInterceptor(User, UserResponse, { isArray: true }))
-  listUser() {
-    return this.userService.list();
+  @UseInterceptors(MapListInterceptor(User, UserResponse))
+  paginate(@Query() query: BasePaginationRequest) {
+    return this.userService.paginate(query);
   }
 
+  @Get(':id')
   @ApiOkResponse({
     type: UserResponse,
   })
-  @Get(':id')
   @Auth()
   @UseInterceptors(MapInterceptor(User, UserResponse))
-  getUser(@Param('id', ParseIntPipe) id: number) {
+  get(@Param('id', ParseObjectIdPipe) id: string) {
     return this.userService.get(id);
   }
 }

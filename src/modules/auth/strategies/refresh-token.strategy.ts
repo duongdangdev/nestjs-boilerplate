@@ -20,7 +20,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(payload: RefreshTokenPayload): Promise<IUserContext> {
-    const user = this.userService.get(payload.sub);
+    const user = await this.userService.get(payload.sub);
 
     if (user.status !== USER_STATUS.ACTIVE) {
       throw new ForbiddenException();

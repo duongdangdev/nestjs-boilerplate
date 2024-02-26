@@ -1,7 +1,7 @@
 import { IUserContext } from '@src/common/consts';
 
 export class AccessTokenPayload {
-  sub: number;
+  sub: string;
   email: string;
   firstName: string;
   lastName: string;

@@ -3,53 +3,49 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { USER_STATUS } from '@src/common/consts';
+import { MONGODB_DUPLICATE_ERROR_CODE } from '@src/common/packages/mongoose';
 import { I18nService } from 'nestjs-i18n';
 import { CreateUserDto } from './dtos';
 import { comparePassword, hashPassword } from './password.helper';
-import { User } from './user.entity';
-import { USER_STATUS } from '@src/common/consts';
+import { UserRepository } from './user.repository';
+import { BasePaginationRequest } from '@src/common/dtos';
 
 @Injectable()
 export class UserService {
-  listUser: User[] = [];
+  constructor(
+    private readonly i18n: I18nService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
-  constructor(private readonly i18n: I18nService) {}
-
-  list() {
-    return this.listUser;
+  paginate({ page, perPage }: BasePaginationRequest) {
+    return this.userRepository.paginate({}, { page, perPage });
   }
 
-  get(id: number) {
-    const user = this.listUser.find((user) => user.id === id);
-
-    if (!user) {
-      throw new NotFoundException(this.i18n.t('user.NotFound'));
-    }
-
-    return user;
+  get(id: string) {
+    return this.userRepository.findByIdOrFail(id);
   }
 
   async create(dto: CreateUserDto) {
-    const emailExists = this.listUser.find((user) => user.email === dto.email);
+    try {
+      const user = await this.userRepository.create({
+        ...dto,
+        password: await hashPassword(dto.password),
+        status: USER_STATUS.ACTIVE,
+      });
 
-    if (emailExists) {
-      throw new ConflictException(this.i18n.t('user.EmailExists'));
+      return user;
+    } catch (error) {
+      if (error.code === MONGODB_DUPLICATE_ERROR_CODE) {
+        throw new ConflictException(this.i18n.t('user.EmailExists'));
+      }
+
+      throw error;
     }
-
-    const user: User = {
-      ...dto,
-      id: this.listUser.length + 1,
-      password: await hashPassword(dto.password),
-      status: USER_STATUS.ACTIVE,
-    };
-
-    this.listUser.push(user);
-
-    return user;
   }
 
   async validateUserCredential(email: string, password: string) {
-    const user = this.listUser.find((user) => user.email === email);
+    const user = await this.userRepository.findOne({ email });
 
     if (!user) {
       throw new NotFoundException(this.i18n.t('auth.InvalidEmailOrPassword'));

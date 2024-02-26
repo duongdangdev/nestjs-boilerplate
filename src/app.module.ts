@@ -7,13 +7,14 @@ import {
 import { LoggerModule } from 'nestjs-pino';
 import path from 'path';
 import { UserModule } from './modules/user/user.module';
-import { APP_CONFIG } from './configs';
+import { APP_CONFIG, DATABASE_CONFIG } from './configs';
 import { HealthModule } from './modules/health/health.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { AuthModule } from './modules/auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AuthModule } from './modules/auth/auth.module';
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
+    MongooseModule.forRoot(DATABASE_CONFIG.uri),
     SharedModule,
     HealthModule,
     UserModule,

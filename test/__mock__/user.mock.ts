@@ -6,6 +6,9 @@ export const mockUserDto = {
   password: '123456',
 };
 
-export const USER_WRONG_EMAIL = 'user-wrong.gmail.com';
-
-export const USER_WRONG_PASSWORD = 'wrong-password';
+export const mockUserService = {
+  create: jest.fn(),
+  get: jest.fn(),
+  paginate: jest.fn(),
+  validateUserCredential: jest.fn(),
+};

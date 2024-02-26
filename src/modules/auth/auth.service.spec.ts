@@ -3,10 +3,13 @@ import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_CONFIG } from '@src/configs';
+import { UserService } from '../user/user.service';
+import { mockUserDto, mockUserService } from 'test/__mock__/user.mock';
+import { UserResultType } from '../user/user.entity';
 
 describe('UserService', () => {
   const userCtx = {
-    id: 1,
+    id: '1',
     email: 'user.gmail.com',
     firstName: 'donald',
     lastName: 'trump',
@@ -15,6 +18,7 @@ describe('UserService', () => {
   };
 
   let authService: AuthService;
+  let userService: UserService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -24,10 +28,27 @@ describe('UserService', () => {
           signOptions: { expiresIn: APP_CONFIG.accessTokenExpireIn },
         }),
       ],
-      providers: [AuthService, TokenService],
+      providers: [
+        AuthService,
+        TokenService,
+        { provide: UserService, useValue: mockUserService },
+      ],
     }).compile();
 
     authService = app.get<AuthService>(AuthService);
+    userService = app.get<UserService>(UserService);
+  });
+
+  describe('SignUp', () => {
+    it('should signup successfully', async () => {
+      const spy = jest
+        .spyOn(userService, 'create')
+        .mockResolvedValue(mockUserDto as UserResultType);
+
+      await authService.signUp(mockUserDto);
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 
   describe('Login', () => {
