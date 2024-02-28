@@ -65,7 +65,7 @@ export abstract class MongooseBaseRepository<TRawDocType> {
   async paginate(
     filter: FilterQuery<TRawDocType>,
     { page, perPage }: { page: number; perPage: number },
-    options: QueryOptions<TRawDocType> = { lean: true },
+    options?: QueryOptions<TRawDocType>,
   ) {
     const [data, total] = await Promise.all([
       this.find(filter, options)

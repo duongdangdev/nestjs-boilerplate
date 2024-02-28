@@ -1,3 +1,8 @@
+## Environment
+
+Node.js v20.10.0
+Nest.js v10.0.0
+
 ## Installation
 
 ```bash

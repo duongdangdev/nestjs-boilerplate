@@ -32,9 +32,16 @@ export class User extends BaseMongoEntity {
   @AutoMap()
   @Prop()
   gender: string;
+
+  @AutoMap()
+  fullName?: string;
 }
 
 export const UserSchema = MongooseSchemaFactory.create(User);
+
+UserSchema.virtual('fullName').get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
 
 export type UserResultType = User & MongooseResultType;
 
