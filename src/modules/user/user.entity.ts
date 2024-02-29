@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 import { Prop } from '@nestjs/mongoose';
-import { USER_STATUS } from '@src/common/consts';
+import { UserStatus } from '@src/common/consts';
 import {
   BaseMongoEntity,
   MongooseResultType,
@@ -19,7 +19,7 @@ export class User extends BaseMongoEntity {
   password: string;
 
   @Prop()
-  status: USER_STATUS;
+  status: UserStatus;
 
   @AutoMap()
   @Prop()

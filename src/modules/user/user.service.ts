@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { USER_STATUS } from '@src/common/consts';
+import { UserStatus } from '@src/common/consts';
 import { MONGODB_DUPLICATE_ERROR_CODE } from '@src/common/packages/mongoose';
 import { I18nService } from 'nestjs-i18n';
 import { CreateUserDto } from './dtos';
@@ -31,7 +31,7 @@ export class UserService {
       const user = await this.userRepository.create({
         ...dto,
         password: await hashPassword(dto.password),
-        status: USER_STATUS.ACTIVE,
+        status: UserStatus.ACTIVE,
       });
 
       return user;

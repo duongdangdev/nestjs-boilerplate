@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { APP_CONFIG } from '@src/configs';
 import { UserService } from '@src/modules/user/user.service';
 import { RefreshTokenPayload } from '../auth.types';
-import { IUserContext, USER_STATUS } from '@src/common/consts';
+import { IUserContext, UserStatus } from '@src/common/consts';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
@@ -22,7 +22,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   async validate(payload: RefreshTokenPayload): Promise<IUserContext> {
     const user = await this.userService.get(payload.sub);
 
-    if (user.status !== USER_STATUS.ACTIVE) {
+    if (user.status !== UserStatus.ACTIVE) {
       throw new ForbiddenException();
     }
 
