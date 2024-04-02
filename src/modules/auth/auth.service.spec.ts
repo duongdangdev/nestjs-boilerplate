@@ -4,7 +4,7 @@ import { TokenService } from './token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_CONFIG } from '@src/configs';
 import { UserService } from '../user/user.service';
-import { mockUserDto, mockUserService } from 'test/__mock__/user.mock';
+import { __MockUserDto, __MockUserService } from 'test/__mock__/user.mock';
 import { UserResultType } from '../user/user.entity';
 
 describe('UserService', () => {
@@ -31,7 +31,7 @@ describe('UserService', () => {
       providers: [
         AuthService,
         TokenService,
-        { provide: UserService, useValue: mockUserService },
+        { provide: UserService, useValue: __MockUserService() },
       ],
     }).compile();
 
@@ -41,11 +41,12 @@ describe('UserService', () => {
 
   describe('SignUp', () => {
     it('should signup successfully', async () => {
+      const data = __MockUserDto();
       const spy = jest
         .spyOn(userService, 'create')
-        .mockResolvedValue(mockUserDto as UserResultType);
+        .mockResolvedValue(data as UserResultType);
 
-      await authService.signUp(mockUserDto);
+      await authService.signUp(data);
 
       expect(spy).toHaveBeenCalled();
     });

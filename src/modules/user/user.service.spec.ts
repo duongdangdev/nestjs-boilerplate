@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MONGODB_DUPLICATE_ERROR_CODE } from '@src/common/packages/mongoose';
 import { I18nService } from 'nestjs-i18n';
 import { MockMongoRepository } from 'test/__mock__/base/mongo.repository';
-import { mockUserDto } from 'test/__mock__/user.mock';
+import { __MockUserDto } from 'test/__mock__/user.mock';
 import { UserResultType } from './user.entity';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
@@ -35,23 +35,25 @@ describe('UserService', () => {
 
   describe('CreateUser', () => {
     it('should create successfully', async () => {
+      const data = __MockUserDto();
       const spy = jest
         .spyOn(userRepository, 'create')
-        .mockResolvedValueOnce(mockUserDto as UserResultType);
+        .mockResolvedValueOnce(data as UserResultType);
 
-      const user = await userService.create(mockUserDto);
+      const user = await userService.create(data);
 
       expect(spy).toHaveBeenCalled();
-      expect(user.email).toEqual(mockUserDto.email);
+      expect(user.email).toEqual(data.email);
     });
 
     it('should throw conflict error due to email exists', async () => {
+      const data = __MockUserDto();
       const spy = jest
         .spyOn(userRepository, 'create')
         .mockRejectedValueOnce({ code: MONGODB_DUPLICATE_ERROR_CODE });
 
       try {
-        await userService.create(mockUserDto);
+        await userService.create(data);
       } catch (error) {
         expect(spy).toHaveBeenCalled();
         expect(error).toBeInstanceOf(ConflictException);
@@ -61,9 +63,10 @@ describe('UserService', () => {
 
   describe('GetUser', () => {
     it('should return successfully', async () => {
+      const data = __MockUserDto();
       const spy = jest
         .spyOn(userRepository, 'findByIdOrFail')
-        .mockResolvedValueOnce(mockUserDto as UserResultType);
+        .mockResolvedValueOnce(data as UserResultType);
 
       await userService.get('1');
 
@@ -85,8 +88,9 @@ describe('UserService', () => {
 
   describe('ListUser', () => {
     it('should return successfully', async () => {
+      const data = __MockUserDto();
       const spy = jest.spyOn(userRepository, 'paginate').mockResolvedValue({
-        data: [mockUserDto as UserResultType],
+        data: [data as UserResultType],
         meta: { page: 1, perPage: 1, total: 1, totalPages: 1 },
       });
 

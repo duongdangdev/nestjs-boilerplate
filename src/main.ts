@@ -11,7 +11,7 @@ import {
 } from './common/filters';
 import { TimeoutInterceptor } from './common/interceptors';
 import { IExceptionResponse } from './common/types';
-import { APP_CONFIG, NODE_ENV } from './configs';
+import { APP_CONFIG, NodeEnv } from './configs';
 
 function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -74,7 +74,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TimeoutInterceptor(reflector));
 
-  if (APP_CONFIG.nodeEnv !== NODE_ENV.PRODUCTION) {
+  if (APP_CONFIG.nodeEnv !== NodeEnv.PRODUCTION) {
     setupSwagger(app);
   }
 

@@ -1,29 +1,30 @@
 import { AutoMap } from '@automapper/classes';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { BasePaginationResponse } from '@src/common/dtos';
+import { User } from '../user.entity';
 
-export class UserResponse {
-  @ApiProperty()
+export class UserResponse extends PickType(User, [
+  'id',
+  'email',
+  'firstName',
+  'lastName',
+  'gender',
+]) {
   @AutoMap()
   id: string;
 
-  @ApiProperty()
   @AutoMap()
   email: string;
 
-  @ApiProperty()
   @AutoMap()
   firstName: string;
 
-  @ApiProperty()
   @AutoMap()
   lastName: string;
 
   @ApiProperty()
-  @AutoMap()
   fullName: string;
 
-  @ApiProperty()
   @AutoMap()
   gender: string;
 }

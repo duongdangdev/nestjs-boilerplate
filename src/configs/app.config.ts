@@ -10,7 +10,7 @@ import {
   validate,
 } from 'class-validator';
 
-export enum NODE_ENV {
+export enum NodeEnv {
   DEVELOPMENT = 'development',
   TEST = 'test',
   STAGING = 'staging',
@@ -18,8 +18,8 @@ export enum NODE_ENV {
 }
 
 class Config {
-  @IsEnum(NODE_ENV)
-  nodeEnv: NODE_ENV = NODE_ENV.DEVELOPMENT;
+  @IsEnum(NodeEnv)
+  nodeEnv: NodeEnv = NodeEnv.DEVELOPMENT;
 
   @IsNumber()
   @IsNotEmpty()

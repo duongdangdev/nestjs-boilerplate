@@ -1,7 +1,9 @@
+# Project Nest.js Zero
+
 ## Environment
 
 Node.js v20.10.0
-Nest.js v10.0.0
+MongoDb >= v5.0
 
 ## Installation
 
@@ -10,6 +12,8 @@ $ npm install
 ```
 
 ## Running the app
+
+Duplicate file .env.example, rename it to .env and update value of environments variable
 
 ```bash
 # development

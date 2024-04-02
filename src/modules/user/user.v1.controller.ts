@@ -2,7 +2,7 @@ import { MapInterceptor } from '@automapper/nestjs';
 import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from '@src/common/decorators';
-import { PaginateUserResponse, UserResponse } from './dtos/user-response.dto';
+import { PaginateUserResponse, UserResponse } from './dtos/user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { MapListInterceptor } from '@src/common/interceptors/map-list.interceptor';

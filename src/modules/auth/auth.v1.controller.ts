@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { LoginRequest, LoginResponse, RefreshTokenResponse } from './dtos';
 import { AuthMeResponse } from './dtos/me.dto';
 import { AuthLoginGuard, RefreshTokenGuard } from './guards';
-import { CreateUserDto } from '../user/dtos';
+import { CreateUserRequest } from '../user/dtos';
 
 @Controller({
   version: '1',
@@ -19,12 +19,12 @@ export class AuthControllerV1 {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  @ApiBody({ type: CreateUserDto })
+  @ApiBody({ type: CreateUserRequest })
   @Throttle({
     default: { limit: 10, ttl: 60000 },
   })
   @UseGuards(AppThrottlerGuard)
-  signUp(@Body() dto: CreateUserDto) {
+  signUp(@Body() dto: CreateUserRequest) {
     return this.authService.signUp(dto);
   }
 
@@ -55,7 +55,6 @@ export class AuthControllerV1 {
   @ApiOkResponse({ type: AuthMeResponse })
   @Auth()
   me(@UserContext() userCtx: IUserContext) {
-    console.log(userCtx);
     return this.authService.me(userCtx);
   }
 }

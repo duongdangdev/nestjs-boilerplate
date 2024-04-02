@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserStatus } from '@src/common/consts';
-import { MONGODB_DUPLICATE_ERROR_CODE } from '@src/common/packages/mongoose';
+import { BasePaginationRequest } from '@src/common/dtos';
+import { isMongoDuplicateError } from '@src/common/packages/mongoose';
 import { I18nService } from 'nestjs-i18n';
-import { CreateUserDto } from './dtos';
+import { CreateUserRequest } from './dtos';
 import { comparePassword, hashPassword } from './password.helper';
 import { UserRepository } from './user.repository';
-import { BasePaginationRequest } from '@src/common/dtos';
 
 @Injectable()
 export class UserService {
@@ -26,7 +26,7 @@ export class UserService {
     return this.userRepository.findByIdOrFail(id);
   }
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserRequest) {
     try {
       const user = await this.userRepository.create({
         ...dto,
@@ -36,7 +36,7 @@ export class UserService {
 
       return user;
     } catch (error) {
-      if (error.code === MONGODB_DUPLICATE_ERROR_CODE) {
+      if (isMongoDuplicateError(error)) {
         throw new ConflictException(this.i18n.t('user.EmailExists'));
       }
 

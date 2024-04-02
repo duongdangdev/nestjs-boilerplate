@@ -3,7 +3,7 @@ import { IUserContext } from '@src/common/consts';
 import { TokenService } from './token.service';
 import { AccessTokenPayload, RefreshTokenPayload } from './auth.types';
 import { UserService } from '../user/user.service';
-import { CreateUserDto } from '../user/dtos';
+import { CreateUserRequest } from '../user/dtos';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +12,7 @@ export class AuthService {
     readonly userService: UserService,
   ) {}
 
-  async signUp(dto: CreateUserDto) {
+  async signUp(dto: CreateUserRequest) {
     await this.userService.create(dto);
 
     return { success: true };
